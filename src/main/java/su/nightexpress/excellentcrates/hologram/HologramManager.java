@@ -16,6 +16,7 @@ import su.nightexpress.excellentcrates.hologram.handler.HologramPacketsHandler;
 import su.nightexpress.excellentcrates.hologram.handler.HologramProtocolHandler;
 import su.nightexpress.excellentcrates.hologram.listener.HologramListener;
 import su.nightexpress.excellentcrates.hooks.HookId;
+import su.nightexpress.excellentcrates.util.BedrockUtils;
 import su.nightexpress.excellentcrates.util.CrateUtils;
 import su.nightexpress.excellentcrates.util.pos.WorldPos;
 import su.nightexpress.nightcore.manager.AbstractManager;
@@ -41,7 +42,8 @@ public class HologramManager extends AbstractManager<CratesPlugin> {
         if (this.detectHandler()) {
             this.addListener(new HologramListener(this.plugin, this));
 
-            this.addAsyncTask(this::tickHolograms, Config.CRATE_HOLOGRAM_UPDATE_INTERVAL.get());
+            // Entity visibility and player/world access must run on the server thread.
+            this.addTask(this::tickHolograms, Config.CRATE_HOLOGRAM_UPDATE_INTERVAL.get());
         }
     }
 
@@ -170,6 +172,13 @@ public class HologramManager extends AbstractManager<CratesPlugin> {
 
             List<Player> players = new ArrayList<>(world.getPlayers());
             players.removeIf(player -> {
+                if (BedrockUtils.isBedrockPlayer(player) && !Config.CRATE_HOLOGRAM_BEDROCK_ENABLED.get()) {
+                    if (group.isViewer(player)) {
+                        this.removeForViewer(player, group);
+                    }
+                    return true;
+                }
+
                 if (CrateUtils.isInEffectRange(player, location)) return false;
 
                 this.removeForViewer(player, group);

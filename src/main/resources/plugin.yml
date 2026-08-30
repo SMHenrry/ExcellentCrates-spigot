@@ -2,10 +2,11 @@ main: su.nightexpress.excellentcrates.CratesPlugin
 version: '${project.version}'
 name: ExcellentCrates
 author: NightExpress
-desciption: Lightweight, powerful, feature-rich and highly customizable crates plugin.
+description: Lightweight, powerful, feature-rich and highly customizable crates plugin.
 depend: [ nightcore ]
 softdepend:
   - PlaceholderAPI
   - ProtocolLib
   - packetevents
-api-version: 1.21
+  - floodgate
+api-version: '26.2'

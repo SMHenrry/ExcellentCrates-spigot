@@ -13,9 +13,8 @@ import su.nightexpress.nightcore.util.text.night.NightMessage;
 import su.nightexpress.nightcore.util.text.night.wrapper.TagWrappers;
 import su.nightexpress.nightcore.util.wrapper.UniParticle;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 public class CrateUtils {
@@ -23,18 +22,22 @@ public class CrateUtils {
     public static final int REWARD_ITEMS_LIMIT = 27;
 
     @NotNull
-    public static Set<Player> getPlayersForEffects(@NotNull Location location) {
-        Set<Player> players = new HashSet<>(Bukkit.getServer().getOnlinePlayers());
-        players.removeIf(player -> !isInEffectRange(player, location));
-
-        return players;
+    public static Collection<Player> getPlayersForEffects(@NotNull Location location) {
+        int distance = Math.max(0, Config.CRATE_EFFECTS_VISIBILITY_DISTANCE.get());
+        return location.getNearbyPlayers(distance);
     }
 
     public static boolean isInEffectRange(@NotNull Player player, @NotNull Location location) {
-        World world = location.getWorld();
         int distance = Config.CRATE_EFFECTS_VISIBILITY_DISTANCE.get();
 
-        return player.getWorld() == world && player.getLocation().distance(location) <= distance;
+        return isInEffectRange(player, location, distance);
+    }
+
+    public static boolean isInEffectRange(@NotNull Player player, @NotNull Location location, int distance) {
+        World world = location.getWorld();
+        int maxDistance = Math.max(0, distance);
+
+        return player.getWorld() == world && player.getLocation().distanceSquared(location) <= (double) maxDistance * maxDistance;
     }
 
     @NotNull
