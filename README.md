@@ -53,7 +53,7 @@
     - [**nightcore 2.16.4+**](https://nightexpressdev.com/nightcore/) - Plugin engine.
 - Optional Plugins:
     - [**PacketEvents 2.13.0+**](https://spigotmc.org/resources/80279/) (recommended) or a [**ProtocolLib build compatible with 26.2**](https://github.com/dmulloy2/ProtocolLib/actions) - Crate holograms.
-    - [**Geyser**](https://geysermc.org/) and [**Floodgate**](https://geysermc.org/) - Bedrock cross-play with automatically reduced crate particles.
+    - [**Geyser**](https://geysermc.org/) and [**Floodgate**](https://geysermc.org/) - Bedrock cross-play compatibility and Bedrock-specific hologram controls.
 - Folia Supported: <span style="color:red">**No**</span>
 - Forge Supported: <span style="color:red">**No**</span>
 

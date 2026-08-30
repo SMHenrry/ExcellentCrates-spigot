@@ -43,7 +43,6 @@ import su.nightexpress.excellentcrates.dialog.reward.*;
 import su.nightexpress.excellentcrates.hologram.HologramTemplate;
 import su.nightexpress.excellentcrates.registry.CratesRegistries;
 import su.nightexpress.excellentcrates.user.CrateUser;
-import su.nightexpress.excellentcrates.util.BedrockUtils;
 import su.nightexpress.excellentcrates.util.CrateUtils;
 import su.nightexpress.excellentcrates.util.InteractType;
 import su.nightexpress.excellentcrates.util.ItemHelper;
@@ -65,8 +64,6 @@ import java.util.*;
 
 public class CrateManager extends AbstractManager<CratesPlugin> {
 
-    private static final UniParticle BEDROCK_SAFE_PARTICLE = UniParticle.of(Particle.CLOUD);
-
     private final DialogRegistry dialogs;
 
     private final Map<String, Rarity>      rarityByIdMap;
@@ -74,8 +71,6 @@ public class CrateManager extends AbstractManager<CratesPlugin> {
     private final Map<WorldPos, Crate>     crateByPosMap;
     private final Map<String, PreviewMenu> previewByIdMap;
     private final Map<UUID, Long>          previewCooldown;
-
-    private long effectTickCount;
 
     private OpeningCostMenu   costMenu;
     private OpeningAmountMenu amountMenu;
@@ -735,10 +730,6 @@ public class CrateManager extends AbstractManager<CratesPlugin> {
     }
 
     public void playCrateEffects() {
-        int bedrockInterval = Math.max(1, Config.CRATE_EFFECTS_BEDROCK_UPDATE_INTERVAL.get());
-        int bedrockDistance = Config.CRATE_EFFECTS_BEDROCK_VISIBILITY_DISTANCE.get();
-        boolean playBedrockStep = this.effectTickCount % bedrockInterval == 0L;
-
         this.getCrates().forEach(crate -> {
             if (!crate.isEffectEnabled()) return;
 
@@ -754,29 +745,11 @@ public class CrateManager extends AbstractManager<CratesPlugin> {
                 if (location == null) return;
 
                 CrateUtils.getPlayersForEffects(location).forEach(player -> {
-                    if (BedrockUtils.isBedrockPlayer(player)) {
-                        if (Config.CRATE_EFFECTS_BEDROCK_ENABLED.get() && playBedrockStep && CrateUtils.isInEffectRange(player, location, bedrockDistance)) {
-                            this.playBedrockEffect(location, particle, player);
-                        }
-                        return;
-                    }
-
                     effect.playStep(location, particle, player);
                 });
             });
         });
 
         CratesRegistries.getEffects().forEach(CrateEffect::addTickCount);
-        this.effectTickCount++;
-    }
-
-    private void playBedrockEffect(@NotNull Location origin, @NotNull UniParticle crateParticle, @NotNull Player player) {
-        UniParticle particle = Config.CRATE_EFFECTS_BEDROCK_USE_CRATE_PARTICLE.get() ? crateParticle : BEDROCK_SAFE_PARTICLE;
-        int amount = Math.clamp(Config.CRATE_EFFECTS_BEDROCK_PARTICLE_AMOUNT.get(), 1, 4);
-        Location location = origin.clone().add(0.5D, 0.65D, 0.5D);
-
-        // Geyser expands a Java particle amount into individual Bedrock packets,
-        // so deliberately keep this to one lightweight emission per update.
-        particle.play(player, location, 0.15D, 0D, amount);
     }
 }

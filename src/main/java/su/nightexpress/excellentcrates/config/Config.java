@@ -116,36 +116,6 @@ public class Config {
         "Sets max. distance where players can see crate particles and holograms."
     );
 
-    public static final ConfigValue<Boolean> CRATE_EFFECTS_BEDROCK_ENABLED = ConfigValue.create("Crate.Effects.Bedrock.Enabled",
-        true,
-        "Controls whether Bedrock players can see crate particles.",
-        "Bedrock clients receive a lightweight effect to avoid Geyser particle packet amplification."
-    );
-
-    public static final ConfigValue<Boolean> CRATE_EFFECTS_BEDROCK_USE_CRATE_PARTICLE = ConfigValue.create("Crate.Effects.Bedrock.Use_Crate_Particle",
-        false,
-        "When enabled, Bedrock players see the particle configured for each crate.",
-        "When disabled, the safe CLOUD particle is used. Keep this disabled if a particle causes client issues."
-    );
-
-    public static final ConfigValue<Integer> CRATE_EFFECTS_BEDROCK_UPDATE_INTERVAL = ConfigValue.create("Crate.Effects.Bedrock.Update_Interval",
-        10,
-        "Sets the Bedrock particle update interval in ticks.",
-        "Higher values reduce packets. 10 ticks equals two updates per second."
-    );
-
-    public static final ConfigValue<Integer> CRATE_EFFECTS_BEDROCK_VISIBILITY_DISTANCE = ConfigValue.create("Crate.Effects.Bedrock.Visibility_Distance",
-        16,
-        "Sets the maximum distance where Bedrock players can see crate particles.",
-        "This does not affect holograms or Java players."
-    );
-
-    public static final ConfigValue<Integer> CRATE_EFFECTS_BEDROCK_PARTICLE_AMOUNT = ConfigValue.create("Crate.Effects.Bedrock.Particle_Amount",
-        1,
-        "Sets the particles sent per Bedrock update and crate block.",
-        "Values above 4 are clamped to protect Bedrock clients."
-    );
-
     public static final ConfigValue<Map<String, HologramTemplate>> CRATE_HOLOGRAM_TEMPLATES = ConfigValue.forMapById("Crate.Holograms.TemplateList",
         HologramTemplate::read,
         map -> map.putAll(HologramTemplate.getDefaultTemplates()),
