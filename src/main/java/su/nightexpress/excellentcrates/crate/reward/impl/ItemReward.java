@@ -11,10 +11,10 @@ import su.nightexpress.excellentcrates.crate.impl.Rarity;
 import su.nightexpress.excellentcrates.crate.reward.AbstractReward;
 import su.nightexpress.excellentcrates.util.CrateUtils;
 import su.nightexpress.excellentcrates.util.ItemHelper;
+import su.nightexpress.excellentcrates.util.ItemTagMigration;
 import su.nightexpress.nightcore.bridge.item.AdaptedItem;
 import su.nightexpress.nightcore.config.ConfigValue;
 import su.nightexpress.nightcore.config.FileConfig;
-import su.nightexpress.nightcore.util.ItemNbt;
 import su.nightexpress.nightcore.util.ItemUtil;
 import su.nightexpress.nightcore.util.Players;
 import su.nightexpress.nightcore.util.placeholder.Replacer;
@@ -40,7 +40,7 @@ public class ItemReward extends AbstractReward {
         if (config.contains(path + ".Items")) {
             int count = 0;
             for (String encoded : config.getStringList(path + ".Items")) {
-                ItemStack itemStack = ItemNbt.decompress(encoded);
+                ItemStack itemStack = ItemTagMigration.decompress(encoded);
                 if (itemStack == null) return;
 
                 AdaptedItem provider = ItemHelper.vanilla(itemStack);

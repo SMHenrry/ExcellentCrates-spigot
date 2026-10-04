@@ -47,15 +47,26 @@
 
 ## System Requirements
 - Server Software: [**Paper**](https://papermc.io/downloads/paper)
-- Server Version: <span style="color:red">**26.2**</span>
+- Server Version: <span style="color:red">**26.3**</span>
 - Java Version: [**25**](https://adoptium.net/temurin/releases) or above
 - Dependencies:
-    - [**nightcore 2.16.4+**](https://nightexpressdev.com/nightcore/) - Plugin engine.
+    - [**nightcore 2.16.6+**](https://nightexpressdev.com/nightcore/) - Plugin engine.
 - Optional Plugins:
-    - [**PacketEvents 2.13.0+**](https://spigotmc.org/resources/80279/) (recommended) or a [**ProtocolLib build compatible with 26.2**](https://github.com/dmulloy2/ProtocolLib/actions) - Crate holograms.
+    - [**PacketEvents 2.13.0+**](https://spigotmc.org/resources/80279/) (recommended) or a [**ProtocolLib build compatible with 26.3**](https://github.com/dmulloy2/ProtocolLib/actions) - Crate holograms.
     - [**Geyser**](https://geysermc.org/) and [**Floodgate**](https://geysermc.org/) - Bedrock cross-play compatibility and Bedrock-specific hologram controls.
 - Folia Supported: <span style="color:red">**No**</span>
 - Forge Supported: <span style="color:red">**No**</span>
+
+## Upgrading this fork to Paper 26.3
+
+This fork builds against Paper `26.3.build.151-beta` and requires **nightcore 2.16.6 or newer** at runtime. Updating ExcellentCrates alone does not update NightCore.
+
+1. Stop the server and back up the `plugins/ExcellentCrates` folder.
+2. Replace the ExcellentCrates jar and the NightCore jar; remove older duplicate jars.
+3. Use a PacketEvents or ProtocolLib build compatible with 26.3 if holograms are enabled.
+4. Start the server, check crate previews and physical keys, then open a test crate.
+
+Minecraft 26.3 removed `map_color` and replaced `swing_animation` with `attack_animation` and `interact_animation`. Vanilla's data fixer leaves references to the old names inside `tooltip_display.hidden_components`. This fork removes the obsolete map reference and replaces the old swing reference with both new names before NightCore decodes saved vanilla items. It covers crate items, keys, previews, rewards, costs, legacy item formats, and nested container/bundle/projectile/remainder items. Other components and custom NBT retain their types and values. The stored source DataVersion is preserved so NightCore can still apply Minecraft's other migrations.
 
 ## Links
 - [SpigotMC](https://spigotmc.org/resources/48732/)
