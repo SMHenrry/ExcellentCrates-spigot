@@ -1,0 +1,5 @@
+name: Paper26_3Probe
+version: 1
+main: Paper26_3Probe
+api-version: '26.3'
+depend: [nightcore, ExcellentCrates]

@@ -38,7 +38,7 @@ public class ItemHelper {
                 }
 
                 if (config.contains(path + ".Tag")) {
-                    ItemTag tag = ItemTag.read(config, path + ".Tag");
+                    ItemTag tag = ItemTagMigration.migrate(ItemTag.read(config, path + ".Tag"));
                     adaptedItem = new AdaptedVanillaStack(tag);
                     config.remove(path + ".Tag");
                 }
@@ -67,6 +67,16 @@ public class ItemHelper {
 
             if (adaptedItem != null) {
                 config.set(path, adaptedItem);
+            }
+        }
+
+        if ("vanilla".equalsIgnoreCase(config.getString(path + ".Provider"))) {
+            ItemTag source = ItemTag.read(config, path + ".Data");
+            ItemTag migrated = ItemTagMigration.migrate(source);
+            if (migrated != source) {
+                AdaptedVanillaStack item = new AdaptedVanillaStack(migrated);
+                if (item.isValid()) config.set(path + ".Data", migrated);
+                return Optional.of(item);
             }
         }
 
